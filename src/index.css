@@ -1,0 +1,13 @@
+.container {
+  margin-bottom: 10px;
+}
+
+label, textarea {
+  display: block; /* This makes the element take up the full width */
+  margin-bottom: 5px; /* Adds some space below each element */
+}
+
+textarea {
+  width: 100%; /* Sets the width of the textarea to fill its container */
+  resize: none; /* Prevents resizing of the textarea */
+}
