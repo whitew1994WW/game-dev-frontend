@@ -29,11 +29,14 @@ EOF
 
 # Build your React application
 echo "Building the React app..."
-npm run build
+npm run build 
 
 # Deploy the build to the S3 bucket
 echo "Deploying to S3 bucket..."
-aws s3 sync dist/ s3://$BUCKET_NAME/
+# Delete current files in the bucket
+aws s3 rm s3://$BUCKET_NAME/ --recursive
+# Copy the new build to the bucket
+aws s3 cp build/ s3://$BUCKET_NAME/ --recursive
 
 # Invalidate the CloudFront cache to ensure fresh content is served
 echo "Invalidating CloudFront cache..."
