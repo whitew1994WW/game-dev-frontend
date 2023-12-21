@@ -29,7 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemSelected, signOut, menuOptions 
                     </li>
                 ))}
             </ul>
-            <button onClick={signOut} className="bg-red-600 hover:bg-red-800 text-white p-2 mt-4 w-full">Sign Out</button>
+            <button onClick={signOut} className="bg-red-600 hover:bg-red-800 text-white p-2 mt-4 w-full rounded">Sign Out</button>
         </div>
     );
 };

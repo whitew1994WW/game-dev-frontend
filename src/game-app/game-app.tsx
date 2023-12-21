@@ -5,12 +5,13 @@ import GameStoryBoard from './game-story-board';
 import { GameStoryBoardState } from './game-story-board';
 import { CharacterTilesheetsState } from './character-tilesheets';
 import CharacterTilesheets from './character-tilesheets';
-import TokenShop from './token-shop';
+import StartingScreen from './starting-screen';
+import { StartingScreenState } from './starting-screen';
 import '../index.css'; 
 
 
 const GameApp: React.FC<WithAuthenticatorProps> = ({ signOut }) => {
-    const [activeSidebarItem, setActiveSidebarItem] = useState<string>('storyBoard');
+    const [activeSidebarItem, setActiveSidebarItem] = useState<string>('startingScreen');
     const initialGameState: GameStoryBoardState = {
         gameDescription: '',
         gameType: '',
@@ -24,12 +25,17 @@ const GameApp: React.FC<WithAuthenticatorProps> = ({ signOut }) => {
         characters: [{ name: '', description: '', label: '' }], // Assuming these are arrays, initialize them as empty arrays
     };
     const [gameData, setGameData] = useState<GameStoryBoardState>(initialGameState);
+    const [startingScreenState, setStartingScreenState] = useState<StartingScreenState>({} as StartingScreenState);
     const [characterTilesheetsData, setCharacterTilesheetsData] = useState<CharacterTilesheetsState>({
         storyBoardState: initialGameState,
         imageUrls: {},
         loadingImages: {},
     });
     const menuOptions = {
+        startingScreen: {
+            itemName: 'startingScreen',
+            menuText: 'Start Here'
+        },
         storyBoard: {
             itemName: 'storyBoard',
             menuText: 'Game Story Board'
@@ -38,10 +44,10 @@ const GameApp: React.FC<WithAuthenticatorProps> = ({ signOut }) => {
             itemName: 'characterTilesheets',
             menuText: 'Character Tilesheets'
         },
-        tokenShop: {
-            itemName: 'tokenShop',
-            menuText: 'Token Shop'
-        },
+        // tokenShop: {
+        //     itemName: 'tokenShop',
+        //     menuText: 'Token Shop'
+        // },
     };
 
     useEffect(() => {
@@ -61,15 +67,16 @@ const GameApp: React.FC<WithAuthenticatorProps> = ({ signOut }) => {
             <Sidebar onItemSelected={setActiveSidebarItem} signOut={signOut} menuOptions={menuOptions} />
 
             <div className="flex-1 p-4">
+                {activeSidebarItem === 'startingScreen' && (
+                    <StartingScreen state={startingScreenState} setState={setStartingScreenState} />
+                )}
                 {activeSidebarItem === 'storyBoard' && (
-                    <GameStoryBoard state={gameData} setState={setGameData} />
+                    <GameStoryBoard state={gameData} setState={setGameData} apiKey={startingScreenState.apiKey}/>
                 )}
                 {activeSidebarItem === 'characterTilesheets' && (
-                    <CharacterTilesheets state={characterTilesheetsData} setState={setCharacterTilesheetsData} />
+                    <CharacterTilesheets state={characterTilesheetsData} setState={setCharacterTilesheetsData} apiKey={startingScreenState.apiKey}/>
                 )}
-                {activeSidebarItem === 'tokenShop' && (
-                    <TokenShop />
-                )}
+
             </div>
 
             

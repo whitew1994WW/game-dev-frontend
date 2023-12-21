@@ -1,5 +1,7 @@
 import React from 'react';
 import '../index.css'; 
+import { getCurrentUser } from 'aws-amplify/auth';
+
 
 interface Environment {
     [key: string]: any;
@@ -34,6 +36,12 @@ export interface GameStoryBoardState {
     isLoading?: boolean;
 }
 
+interface ApiRequest {
+    storyBoardState: GameStoryBoardState;
+    apiKey: string;
+    username: string;
+}
+
 const initialGameState: GameStoryBoardState = {
     gameDescription: '',
     gameType: '',
@@ -65,7 +73,7 @@ const StoryBoardTextAreaInput: React.FC<{label: string, value: string, onChange:
 
 
 // Take in GameState as props
-const GameStoryBoard: React.FC<{ state: GameStoryBoardState; setState: React.Dispatch<React.SetStateAction<GameStoryBoardState>> }> = ({ state, setState }) => {
+const GameStoryBoard: React.FC<{ state: GameStoryBoardState; setState: React.Dispatch<React.SetStateAction<GameStoryBoardState>>; apiKey: string}> = ({ state, setState, apiKey}) => {
     const resetState = () => {
         setState(initialGameState);
     };
@@ -107,17 +115,11 @@ const GameStoryBoard: React.FC<{ state: GameStoryBoardState; setState: React.Dis
         const url = '/api/generate_all_details';
         console.log('Calling API:', url);
         try {
-            const apiRequest: GameStoryBoardState = { 
-                gameDescription: state.gameDescription,
-                gameType: state.gameType,
-                graphicView: state.graphicView,
-                graphicStyle: state.graphicStyle,
-                multiplayerOption: state.multiplayerOption,
-                plot: state.plot,
-                characters: state.characters,
-                colourSchemes: state.colourSchemes,
-                styleKeywords: state.styleKeywords,
-                environments: state.environments
+            const currentUser = await getCurrentUser();
+            const apiRequest: ApiRequest = { 
+                storyBoardState: state,
+                username: currentUser.username,
+                apiKey
             };
             const response = await fetch(url, {
                 method: 'POST', 
