@@ -3,7 +3,7 @@ import '../index.css';
 import { getCurrentUser } from 'aws-amplify/auth';
 
 
-interface Environment {
+export interface Environment {
     [key: string]: any;
     name: string;
     description: string;
@@ -59,7 +59,7 @@ const StoryBoardTextAreaInput: React.FC<{label: string, value: string, onChange:
     const className = "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline " + height;
     return (
             <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
+                <label className="block text-gray-700 text-m font-bold mb-2">
                     {label}
                 </label>
                 <textarea
@@ -162,6 +162,8 @@ const GameStoryBoard: React.FC<{ state: GameStoryBoardState; setState: React.Dis
                     onAddItem={() => addItemToList('colourSchemes', { colour: '', label: '' })}
                     onRemoveItem={(index) => removeItemFromList('colourSchemes', index)}
                     height="h-12"
+                    headerFields={['Colour', 'Pallete Label']}
+                    widths={['25%', '65%']}
                 />
 
                 {/* Environments Section */}
@@ -172,6 +174,8 @@ const GameStoryBoard: React.FC<{ state: GameStoryBoardState; setState: React.Dis
                     onAddItem={() => addItemToList('environments', { name: '', description: '' })}
                     onRemoveItem={(index) => removeItemFromList('environments', index)}
                     height="h-12"
+                    headerFields={['Name', 'Description']}
+                    widths={['25%', '65%']}
                 />
 
                 {/* Characters Section */}
@@ -179,9 +183,11 @@ const GameStoryBoard: React.FC<{ state: GameStoryBoardState; setState: React.Dis
                     label="Characters"
                     items={state.characters}
                     onItemChange={(index, field, value) => handleItemChange('characters', index, field, value)}
-                    onAddItem={() => addItemToList('characters', { name: '', description: '', enemy: '', player: '' })}
+                    onAddItem={() => addItemToList('characters', { name: '', description: '', label: '' })}
                     onRemoveItem={(index) => removeItemFromList('characters', index)}
                     height="h-12"
+                    headerFields={['Name', 'Enemy/Player/Friendly', 'Description']}
+                    widths={['25%', '15%', '50%']}
                 />
 
                 <div className="flex justify-between mt-4">
@@ -214,9 +220,11 @@ interface TableSectionProps {
     onAddItem: () => void;
     onRemoveItem: (index: number) => void;
     height: string;
+    headerFields: string[];
+    widths: string[];
 }
 
-const TableSection: React.FC<TableSectionProps> = ({ label, items, onItemChange, onAddItem, onRemoveItem, height}) => {
+const TableSection: React.FC<TableSectionProps> = ({ label, items, onItemChange, onAddItem, onRemoveItem, height, headerFields, widths}) => {
     const renderInputFields = (item: Item, index: number) => {
         const class_name = "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline " + height;
         return Object.keys(item).map((field) => (
@@ -231,15 +239,31 @@ const TableSection: React.FC<TableSectionProps> = ({ label, items, onItemChange,
         ));
     };
 
+    const calculateWidth = (index: number) => {
+        // Example: Adjust these widths based on your needs
+        return widths[index] || 'auto'; // Default to 'auto' if no specific width is set
+    };
+
+
     return (
         <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">{label}:</label>
             <table className="table-auto w-full mb-2">
+                <thead>
+                    <tr>
+                        {headerFields.map((field, fieldIndex) => (
+                            <th key={fieldIndex} className="text-gray-700 text-m" style={{ width: calculateWidth(fieldIndex) }}>
+                                {field}
+                            </th>
+                        ))}
+                        <th className="p-2" style={{ width: '10%' }}>Actions</th>
+                    </tr>
+                </thead>
                 <tbody>
                     {items.map((item, index) => (
                         <tr key={index}>
                             {renderInputFields(item, index)}
-                            <td>
+                            <td className="p-2 flex justify-center items-center">
                                 <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline" onClick={() => onRemoveItem(index)}>
                                     Delete
                                 </button>

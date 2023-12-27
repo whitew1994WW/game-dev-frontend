@@ -14,7 +14,6 @@ const App: React.FC = () => {
         <Routes>
         <Route path="/" element={<Layout><HomePage /></Layout>} />
         <Route path="/about" element={<Layout><AboutPage /></Layout>} />
-        <Route path="/pricing" element={<Layout><PricingPage /></Layout>} />
         <Route path="/gamedevtool" element={<GameApp />} />
         </Routes>
     </Router>
@@ -46,7 +45,6 @@ const Menu: React.FC = () => {
       <ul className="flex justify-center space-x-4">
         <li><Link className="text-blue-600 hover:text-blue-800" to="/">Home</Link></li>
         <li><Link className="text-blue-600 hover:text-blue-800" to="/about">About</Link></li>
-        <li><Link className="text-blue-600 hover:text-blue-800" to="/pricing">Pricing</Link></li>
         <li><Link className="text-blue-600 hover:text-blue-800" to="/gamedevtool">App</Link></li>
       </ul>
     </nav>
@@ -73,15 +71,6 @@ const AboutPage: React.FC = () => {
   );
 };
 
-const PricingPage: React.FC = () => {
-  return (
-    <div className="flex justify-center p-4">
-          <main>
-              <p>This is the pricing page.</p>
-          </main>
-      </div>
-  );
-};
 
 const Footer: React.FC = () => {
   return (

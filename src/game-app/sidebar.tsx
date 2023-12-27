@@ -10,6 +10,7 @@ interface MenuOption {
 interface menuOptions {
     [key: string]: MenuOption;
 }
+
 interface SidebarProps {
     onItemSelected: (item: string) => void;
     signOut: WithAuthenticatorProps['signOut'];
@@ -18,18 +19,22 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ onItemSelected, signOut, menuOptions }) => {
     return (
-        <div className="sticky top-0 w-64 h-screen bg-gray-200 p-4">
-            <h2 className="font-bold text-lg mb-4">Sidebar</h2>
+        <div className="sticky top-0 w-64 h-screen bg-gray-800 text-white p-4">
+            <h2 className="font-bold text-xl mb-6">Game Generator</h2>
             <ul className="list-none">
                 {Object.keys(menuOptions).map((item) => (
-                    <li key={item} className="mb-2">
-                        <button onClick={() => onItemSelected(item)} className="text-blue-600 hover:text-blue-800">
+                    <li key={item} className="mb-4">
+                        <button onClick={() => onItemSelected(item)} className="text-lg text-gray-300 hover:text-white w-full text-left">
                             {menuOptions[item].menuText}
                         </button>
                     </li>
                 ))}
             </ul>
-            <button onClick={signOut} className="bg-red-600 hover:bg-red-800 text-white p-2 mt-4 w-full rounded">Sign Out</button>
+            <div className="absolute bottom-4">
+                <button onClick={signOut} className="bg-blue-500 hover:bg-red-700 text-white py-2 px-4 w-full rounded transition duration-200 ease-in-out">
+                    Sign Out
+                </button>
+            </div>
         </div>
     );
 };
